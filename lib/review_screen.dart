@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:like_button/like_button.dart';
+import 'package:review_booking_web/widget/basic_alert.dart';
 
 import 'config/theme_config.dart';
 import 'controller/submitController.dart';
@@ -37,7 +38,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   Widget _buildStar() {
     final stars = List<Widget>.generate(
         5,
-            (index) => LikeButton(
+        (index) => LikeButton(
             onTap: (bool isLiked) async {
               setState(() {
                 currRating = index + 1;
@@ -162,10 +163,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     return InkWell(
       onTap: () {
-        _submitControler.submit(data['id'], {
-          "star": currRating.toString(),
-          "review": _submitControler.reviewContent.text
-        }).then((v) {
+        _submitControler.submit(
+            data['id'], {"star": currRating.toString(), "review": _submitControler.reviewContent.text}).then((v) {
           if (v) {
             setState(() {
               if (isPlaying) {

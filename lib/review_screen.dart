@@ -7,6 +7,7 @@ import 'package:like_button/like_button.dart';
 import 'package:review_booking_web/widget/basic_alert.dart';
 
 import 'config/theme_config.dart';
+import 'controller/app_controller.dart';
 import 'controller/submitController.dart';
 
 class ReviewScreen extends StatefulWidget {
@@ -38,21 +39,24 @@ class _ReviewScreenState extends State<ReviewScreen> {
   Widget _buildStar() {
     final stars = List<Widget>.generate(
         5,
-        (index) => LikeButton(
-            onTap: (bool isLiked) async {
-              setState(() {
-                currRating = index + 1;
-              });
-              return !isLiked;
-            },
-            size: 70,
-            bubblesColor: const BubblesColor(
-              dotPrimaryColor: ThemeConfig.warningColor,
-              dotSecondaryColor: Color(0xff0099cc),
-            ),
-            likeBuilder: (bool isLiked) {
-              return _buildRatingStar(index);
-            }));
+        (index) => Container(
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              child: LikeButton(
+                  onTap: (bool isLiked) async {
+                    setState(() {
+                      currRating = index + 1;
+                    });
+                    return !isLiked;
+                  },
+                  size: 70,
+                  bubblesColor: const BubblesColor(
+                    dotPrimaryColor: ThemeConfig.warningColor,
+                    dotSecondaryColor: Color(0xff0099cc),
+                  ),
+                  likeBuilder: (bool isLiked) {
+                    return _buildRatingStar(index);
+                  }),
+            ));
 
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: stars);
   }
@@ -172,10 +176,23 @@ class _ReviewScreenState extends State<ReviewScreen> {
               } else {
                 _confettiController.play();
               }
+
+              if (currRating <= 2) {
+                BasicAlert.badAlert(context, title: 'Cám ơn bạn đã đóng góp ý kiến', onConfirmBtnTap: () {
+                  appController.refreshController.reloadData(true);
+                  Navigator.pop(context);
+                });
+              } else {
+                BasicAlert.successAlert(context, title: 'Cám ơn bạn đã sử dụng dịch vụ', onConfirmBtnTap: () {
+                  appController.refreshController.reloadData(true);
+                  Navigator.pop(context);
+                });
+              }
+              // BasicAlert.successAlert(context, title: 'Cám ơn bạn đã đánh giá');
             });
           } else {
             // empty id
-            // BasicAlert.errorAlert(context, title: 'Vui lòng nhập nội dung');
+            BasicAlert.errorAlert(context, title: 'Vui lòng nhập nội dung');
           }
         });
       },

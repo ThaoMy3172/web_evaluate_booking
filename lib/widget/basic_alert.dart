@@ -109,4 +109,26 @@ class BasicAlert {
         type: QuickAlertType.error,
         customAsset: 'assets/gif/error.gif',
       );
+
+  static badAlert(
+    BuildContext context, {
+    required String title,
+    String? confirmBtnText,
+    double? width,
+    Widget? widget,
+    bool? showCancelBtn,
+    void Function()? onConfirmBtnTap,
+    void Function()? onCancelBtnTap,
+  }) =>
+      QuickAlert.show(
+        width: width ?? 500,
+        title: title,
+        confirmBtnText: confirmBtnText ?? 'Xác nhận',
+        onConfirmBtnTap: onConfirmBtnTap,
+        onCancelBtnTap: onCancelBtnTap,
+        widget: widget,
+        showCancelBtn: showCancelBtn ?? false,
+        context: context,
+        type: QuickAlertType.info,
+      );
 }

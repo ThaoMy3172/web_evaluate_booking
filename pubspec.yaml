@@ -42,7 +42,9 @@ dependencies:
 #  flutter_html: ^2.0.0
   like_button: ^2.0.5
 
-  flutter_math_fork: ^0.7.1
+  flutter_math_fork: ^0.7.0
+  flutter_html: ^3.0.0-alpha.3
+
   cherry_toast: ^1.3.1
   feather_icons: ^1.2.0
   quickalert: ^1.0.1

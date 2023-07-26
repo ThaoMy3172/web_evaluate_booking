@@ -1,6 +1,7 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:like_button/like_button.dart';
@@ -40,7 +41,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     final stars = List<Widget>.generate(
         5,
         (index) => Container(
-              margin: EdgeInsets.symmetric(horizontal: 5),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
               child: LikeButton(
                   onTap: (bool isLiked) async {
                     setState(() {
@@ -61,11 +62,13 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: stars);
   }
 
-  final _confettiController = ConfettiController(duration: const Duration(seconds: 5));
+  final _confettiController =
+      ConfettiController(duration: const Duration(seconds: 5));
   bool isPlaying = false;
-  String branchName = '<h2>Eximbank</h2>';
-  String typeTransactionName = '<h2>Doanh nhân</h2>';
-  String welcomeTitle = '<h2>Cám ơn bạn đã sử dụng dịch vụ của chúng tôi</h2>';
+  String branchName = "Eximbank";
+  String typeTransactionName = "Doanh nghiep";
+  String welcomeTitle =
+      "Kỷ niệm 30 năm thành lập";
   late Map data;
 
   @override
@@ -74,14 +77,28 @@ class _ReviewScreenState extends State<ReviewScreen> {
     super.initState();
     _confettiController.addListener(() {
       setState(() {
-        isPlaying = _confettiController.state == ConfettiControllerState.playing;
+        isPlaying =
+            _confettiController.state == ConfettiControllerState.playing;
       });
     });
 
     //get id from url
     data = Get.parameters;
     //get html welcome title
-    welcomeTitle = 'Kỷ niệm 30 năm thành lập';
+    welcomeTitle =
+    """
+   <div>
+     <h3 style="text-align: center;" >
+        ${branchName}
+     </h3>
+  </div> 
+  <div>
+   <h2 style="text-align: center;" >
+      ${welcomeTitle}
+    </h2>
+  </div> 
+   
+    """;
   }
 
   @override
@@ -103,25 +120,53 @@ class _ReviewScreenState extends State<ReviewScreen> {
               height: size.height,
               width: size.width,
               decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage("assets/images/danhgia_bg.png"), fit: BoxFit.cover),
+                image: DecorationImage(
+                    image: AssetImage("assets/images/danhgia_bg.png"),
+                    fit: BoxFit.cover),
               ),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  //crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     //welcome title
-                    // Html(
-                    //   data: welcomeTitle,
-                    // ),
-                    // review stars
-                    _buildStar(),
-                    const SizedBox(
-                      height: 25,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          constraints: BoxConstraints(
+                            minWidth: 200,
+                            maxWidth: Get.width * 0.5,
+                          ),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Html(
+                              data: welcomeTitle,
+                              style: {
+                                'h2': Style(
+                                  color: ThemeConfig.darkBlueColor,
+                                  fontSize: FontSize(36),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                'h3': Style(
+                                  color: ThemeConfig.darkBlueColor,
+                                  fontSize: FontSize(30),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    //review stars
+                    _buildStar(),
                     Container(
-                        width: size.width / 100 * 60,
+                        width: size.width * 0.6,
                         alignment: Alignment.center,
-                        constraints: const BoxConstraints(minWidth: 300, maxWidth: 500),
+                        margin: const EdgeInsets.only(top: 30),
+                        constraints:
+                            const BoxConstraints(minWidth: 300, maxWidth: 500),
                         child: const Text(
                           'Hãy cho chúng tôi biết suy nghĩ của bạn về dịch vụ của chúng tôi',
                           textAlign: TextAlign.center,
@@ -167,8 +212,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     return InkWell(
       onTap: () {
-        _submitControler.submit(
-            data['id'], {"star": currRating.toString(), "review": _submitControler.reviewContent.text}).then((v) {
+        _submitControler.submit(data['id'], {
+          "star": currRating.toString(),
+          "review": _submitControler.reviewContent.text
+        }).then((v) {
           if (v) {
             setState(() {
               if (isPlaying) {
@@ -176,14 +223,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
               } else {
                 _confettiController.play();
               }
-
               if (currRating <= 2) {
-                BasicAlert.badAlert(context, title: 'Cám ơn bạn đã đóng góp ý kiến', onConfirmBtnTap: () {
+                BasicAlert.badAlert(context,
+                    title: 'Cám ơn bạn đã đóng góp ý kiến',
+                    onConfirmBtnTap: () {
                   appController.refreshController.reloadData(true);
                   Navigator.pop(context);
                 });
               } else {
-                BasicAlert.successAlert(context, title: 'Cám ơn bạn đã sử dụng dịch vụ', onConfirmBtnTap: () {
+                BasicAlert.successAlert(context,
+                    title: 'Cám ơn bạn đã sử dụng dịch vụ',
+                    onConfirmBtnTap: () {
                   appController.refreshController.reloadData(true);
                   Navigator.pop(context);
                 });
@@ -228,7 +278,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
       ),
       child: TextFormField(
         controller: _submitController.reviewContent,
-        decoration: const InputDecoration(border: InputBorder.none, hintText: 'Bạn nghĩ gì..'),
+        decoration: const InputDecoration(
+            border: InputBorder.none, hintText: 'Bạn nghĩ gì..'),
       ),
     );
   }

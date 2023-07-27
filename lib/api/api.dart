@@ -1,5 +1,6 @@
 import 'package:review_booking_web/api/review.dart';
 import 'package:dio/dio.dart';
+import 'package:review_booking_web/api/sound.dart';
 
 import '../config/app_config.dart';
 import '../controller/app_controller.dart';
@@ -29,6 +30,6 @@ class BaseApi {
 }
 
 class Api extends BaseApi
-    with ReviewApi {}
+    with ReviewApi, SoundApi {}
 
 final Api api = Api();

@@ -5,6 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:like_button/like_button.dart';
+import 'package:review_booking_web/controller/sound_controller.dart';
 import 'package:review_booking_web/widget/basic_alert.dart';
 
 import 'config/theme_config.dart';
@@ -26,26 +27,35 @@ class _ReviewScreenState extends State<ReviewScreen> {
       return Icon(
         Icons.star,
         color: ThemeConfig.yellowFadeColor,
-        size: MediaQuery.of(context).size.height / 10,
+        size: MediaQuery
+            .of(context)
+            .size
+            .height / 10,
       );
     }
 
     return Icon(
       Icons.star,
       color: Colors.blueGrey,
-      size: MediaQuery.of(context).size.height / 10,
+      size: MediaQuery
+          .of(context)
+          .size
+          .height / 10,
     );
   }
 
   Widget _buildStar() {
+    SoundController _soundController = SoundController();
     final stars = List<Widget>.generate(
         5,
-        (index) => Container(
+            (index) =>
+            Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),
               child: LikeButton(
                   onTap: (bool isLiked) async {
                     setState(() {
                       currRating = index + 1;
+                      _soundController.playStarSound();
                     });
                     return !isLiked;
                   },
@@ -63,7 +73,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   final _confettiController =
-      ConfettiController(duration: const Duration(seconds: 5));
+  ConfettiController(duration: const Duration(seconds: 5));
   bool isPlaying = false;
   String branchName = "Eximbank";
   String typeTransactionName = "Doanh nghiep";
@@ -89,7 +99,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     """
    <div>
      <h3 style="text-align: center;" >
-        ${branchName}
+        Chi nhánh ${branchName}
      </h3>
   </div> 
   <div>
@@ -110,13 +120,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Stack(
-      alignment: Alignment.topRight,
-      children: [
-        Scaffold(
-          body: Stack(children: [
-            Container(
+        alignment: Alignment.topRight,
+        children: [
+          Scaffold(
+            body: Stack(children: [
+              Container(
               height: size.height,
               width: size.width,
               decoration: const BoxDecoration(
@@ -136,7 +148,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                         Container(
                           constraints: BoxConstraints(
                             minWidth: 200,
-                            maxWidth: Get.width * 0.5,
+                            maxWidth: Get.width * 0.7,
                           ),
                           child: Align(
                             alignment: Alignment.center,
@@ -145,31 +157,34 @@ class _ReviewScreenState extends State<ReviewScreen> {
                               style: {
                                 'h2': Style(
                                   color: ThemeConfig.darkBlueColor,
-                                  fontSize: FontSize(36),
+                                  fontSize: FontSize(52),
                                   fontWeight: FontWeight.w600,
                                 ),
                                 'h3': Style(
                                   color: ThemeConfig.darkBlueColor,
-                                  fontSize: FontSize(30),
+                                  fontSize: FontSize(26),
                                   fontWeight: FontWeight.w500,
                                 ),
                               },
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ],),
                     //review stars
                     _buildStar(),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Container(
                         width: size.width * 0.6,
                         alignment: Alignment.center,
                         margin: const EdgeInsets.only(top: 30),
                         constraints:
-                            const BoxConstraints(minWidth: 300, maxWidth: 500),
+                        const BoxConstraints(minWidth: 300, maxWidth: 500),
                         child: const Text(
                           'Hãy cho chúng tôi biết suy nghĩ của bạn về dịch vụ của chúng tôi',
                           textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 18),
                         )),
                     const SizedBox(
                       height: 20,
@@ -182,7 +197,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Cám ơn vì đã sử dụng dịch vụ của chúng tôi')
+                    const Text('Cám ơn vì đã sử dụng dịch vụ của chúng tôi',
+                      style: TextStyle(fontSize: 18),)
                   ],
                 ),
               ),
@@ -195,15 +211,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 child: Image.asset("assets/images/LogoEximbank.png"),
               ),
             ),
-          ]),
-        ),
-        ConfettiWidget(
-          confettiController: _confettiController,
-          shouldLoop: true,
-          blastDirectionality: BlastDirectionality.explosive,
-          gravity: 0.2,
-        )
-      ],
+        ]),
+    ),
+    ConfettiWidget(
+    confettiController: _confettiController,
+    shouldLoop: true,
+    blastDirectionality: BlastDirectionality.explosive,
+    gravity: 0.2
+    ,
+    )
+    ]
+    ,
     );
   }
 
@@ -227,16 +245,16 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 BasicAlert.badAlert(context,
                     title: 'Cám ơn bạn đã đóng góp ý kiến',
                     onConfirmBtnTap: () {
-                  appController.refreshController.reloadData(true);
-                  Navigator.pop(context);
-                });
+                      appController.refreshController.reloadData(true);
+                      Navigator.pop(context);
+                    });
               } else {
                 BasicAlert.successAlert(context,
                     title: 'Cám ơn bạn đã sử dụng dịch vụ',
                     onConfirmBtnTap: () {
-                  appController.refreshController.reloadData(true);
-                  Navigator.pop(context);
-                });
+                      appController.refreshController.reloadData(true);
+                      Navigator.pop(context);
+                    });
               }
               // BasicAlert.successAlert(context, title: 'Cám ơn bạn đã đánh giá');
             });

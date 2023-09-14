@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../model/index.dart';
 import 'api.dart';
 
 mixin ReviewApi on BaseApi {
@@ -64,6 +65,27 @@ mixin ReviewApi on BaseApi {
     } catch (error) {
       print(error);
       return false;
+    }
+  }
+
+  Future<Index> checkReview(id) async {
+    var url = '/api/Review/${id}/checkReview';
+    try {
+      Response response = await dio.put(url,
+          options: Options(
+            headers: {
+              'accept': '*/*',
+              'Content-Type': 'application/json',
+            },
+          ));
+      if (response.statusCode == 200) {
+        return Index.fromJson(response.data);
+      } else {
+        return Index();
+      }
+    } catch (error) {
+      saveLog(error);
+      return Index();
     }
   }
 }

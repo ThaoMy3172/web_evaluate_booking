@@ -1,7 +1,8 @@
 class AppConfig {
   static const APP_NAME = 'App Service Smart Water';
-  static const BASE_URL = 'http://dev.smartlook.com.vn:59075';
-  static const ASSET_URL = BASE_URL+ '/File/image/';
+  // static const BASE_URL = 'https://dev.smartlook.com.vn:59075';
+  static const BASE_URL = 'http://192.168.1.241:59074';
+  static const ASSET_URL = '$BASE_URL/File/image/';
   static const ASSET_IMAGE = 'assets/images/';
   static const DATE_FOMAT = 'dd/MM/yyyy HH:mm:ss';
   static const DATE_USER_FOMAT = 'dd/MM/yyyy';

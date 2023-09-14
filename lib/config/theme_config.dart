@@ -24,7 +24,7 @@ class ThemeConfig {
   static const Color redColor2 = Color(0xFFffecec);
   static const Color hoverTextColor = greenColor;
   static const Color whiteColor = Colors.white;
-
+  static Color commonTextColor = const Color(0xFF043C63);
   static const Color moneyColor = Color(0xFF457B4C);
   static const Color coffeeColor = Color(0xFFB77A00);
   static const Color warningColor = Color(0xFFE76161);
